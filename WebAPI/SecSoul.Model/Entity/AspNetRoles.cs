@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace WebAPI.Models.Entity
+namespace SecSoul.Model.Entity
 {
     public partial class AspNetRoles
     {

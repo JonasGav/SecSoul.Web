@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Models;
-using WebAPI.Models.Repository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SecSoul.Model.Models;
+using SecSoul.Model.Repository;
 
-namespace WebAPI.Controllers
+namespace SecSoul.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

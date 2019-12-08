@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using WebAPI.Models.Context;
-using WebAPI.Models.Entity;
+﻿using System;
+using Microsoft.Extensions.Logging;
+using SecSoul.Model.Context;
+using SecSoul.Model.Entity;
 
-namespace WebAPI.Models.Repository
+namespace SecSoul.Model.Repository
 {
     public class SecSoulRepository
     {

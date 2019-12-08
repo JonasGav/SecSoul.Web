@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebAPI.Models.Entity;
+using SecSoul.Model.Entity;
 
-namespace WebAPI.Models.Context
+namespace SecSoul.Model.Context
 {
     public partial class SecSoulContext : DbContext
     {
@@ -124,7 +120,10 @@ namespace WebAPI.Models.Context
 
             modelBuilder.Entity<ScanRequest>(entity =>
             {
+                entity.HasKey(e => new { e.Id});
+
                 entity.Property(e => e.RequestDate).HasColumnType("datetime");
+                entity.Property(e => e.IsProcessed).HasDefaultValue(false);
 
                 entity.Property(e => e.WebsiteFtp)
                     .HasMaxLength(50)
@@ -134,6 +133,10 @@ namespace WebAPI.Models.Context
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ScanRequest)
+                    .HasForeignKey(d => d.UserId);
             });
 
             OnModelCreatingPartial(modelBuilder);

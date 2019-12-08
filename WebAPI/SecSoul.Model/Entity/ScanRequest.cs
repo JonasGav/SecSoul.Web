@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WebAPI.Models.Entity
+namespace SecSoul.Model.Entity
 {
     public partial class ScanRequest
     {
@@ -11,5 +8,9 @@ namespace WebAPI.Models.Entity
         public string WebsiteUrl { get; set; }
         public string WebsiteFtp { get; set; }
         public DateTime RequestDate { get; set; }
+        public string UserId { get; set; }
+        public bool IsProcessed { get; set; }
+
+        public virtual AspNetUsers User { get; set; }
     }
 }

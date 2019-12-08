@@ -1,31 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using WebAPI.Models;
-using WebAPI.Models.Entity;
-using WebAPI.Models.Repository;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SecSoul.Model.Entity;
+using SecSoul.Model.Models;
+using SecSoul.Model.Repository;
+using SecSoul.WebAPI.Models;
 
-namespace WebAPI.Controllers
+namespace SecSoul.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class SecSoulController : ControllerBase
     {
+        private UserManager<ApplicationUser> _userManager;
         private SecSoulRepository _repository;
-        public SecSoulController(SecSoulRepository repository)
+        public SecSoulController(SecSoulRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
+            _userManager = userManager;
         }
 
         [HttpPost]
         [Route("ScanWebsite")]
-        public void ScanWebsite(ScanWebsiteJson obj)
+        public async void ScanWebsite(ScanWebsiteJson obj)
         {
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
             var request = new ScanRequest()
             {
                 RequestDate = DateTime.Now,
                 WebsiteUrl = obj.WebsiteUrl,
-                WebsiteFtp = obj.WebsiteFtp
+                WebsiteFtp = obj.WebsiteFtp,
+                UserId = user.Id
             };
             _repository.CreateScanRequest(request);
         }

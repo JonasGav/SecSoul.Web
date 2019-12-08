@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,13 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
-using WebAPI.Models;
-using WebAPI.Models.Context;
-using WebAPI.Models.Repository;
+using SecSoul.Model.Context;
+using SecSoul.Model.Models;
+using SecSoul.Model.Repository;
 
-namespace WebAPI
+namespace SecSoul.WebAPI
 {
     public class Startup
     {
@@ -32,7 +32,7 @@ namespace WebAPI
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<AuthenticationContext>(options =>
+            services.AddDbContext<SecSoul.Model.Context.AuthenticationContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddDbContext<SecSoulContext>(options =>
@@ -42,7 +42,7 @@ namespace WebAPI
 
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AuthenticationContext>();
+                .AddEntityFrameworkStores<SecSoul.Model.Context.AuthenticationContext>();
 
             services.Configure<IdentityOptions>(options =>
             {

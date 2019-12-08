@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WebAPI.Models.Entity
+namespace SecSoul.Model.Entity
 {
     public partial class AspNetUsers
     {
@@ -35,5 +33,6 @@ namespace WebAPI.Models.Entity
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<ScanRequest> ScanRequest { get; set; }
     }
 }

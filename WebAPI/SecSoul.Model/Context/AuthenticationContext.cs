@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SecSoul.Model.Models;
 
-namespace WebAPI.Models
+namespace SecSoul.Model.Context
 {
     public class AuthenticationContext : IdentityDbContext
     {

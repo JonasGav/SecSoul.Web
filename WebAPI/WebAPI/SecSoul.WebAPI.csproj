@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SecSoul.Model\SecSoul.Model.csproj" />
+  </ItemGroup>
+
 </Project>
