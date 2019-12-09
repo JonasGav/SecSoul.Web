@@ -1,7 +1,9 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SecSoul.Model.Context;
 using SecSoul.Model.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SecSoul.Model.Repository
 {
@@ -16,18 +18,38 @@ namespace SecSoul.Model.Repository
         }
         public void CreateScanRequest(ScanRequest scanRequest)
         {
-            using (var scope = new SecSoulContext())
+            try
             {
-                try
+                using (var scope = new SecSoulContext())
                 {
+
                     scope.Add(scanRequest);
                     scope.SaveChanges();
                 }
-                catch (Exception e)
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error at CreateScanRequest", e);
+            }
+        }
+        public IList<ScanRequest> GetUnprocessedScanRequest()
+        {
+            try
+            {
+                using (var scope = new SecSoulContext())
                 {
-                    _logger.LogError("Error at CreateScanRequest", e);
+
+                    return scope.ScanRequest.Where(x => x.IsProcessed == false).ToList();
+
                 }
             }
+            catch (Exception e)
+            {
+                _logger.LogError("Error at CreateScanRequest", e);
+                throw;
+            }
+            
         }
     }
 }
