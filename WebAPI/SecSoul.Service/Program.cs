@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ using SecSoul.Core.Options;
 using SecSoul.Core.Services;
 using SecSoul.Core.Workers;
 using SecSoul.Model.Context;
+using SecSoul.Model.ContextFactories;
 using SecSoul.Model.Repository;
 
 namespace SecSoul.Service
@@ -35,9 +37,20 @@ namespace SecSoul.Service
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    var connetionString = "";
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        connetionString = hostContext.Configuration.GetConnectionString("SecSoulConnectionString");
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    {
+                        connetionString = hostContext.Configuration.GetConnectionString("LinuxSecSoulConnectionString");
+                    }
                     services.AddDbContext<SecSoulContext>(options =>
-                        options.UseSqlServer(hostContext.Configuration.GetConnectionString("SecSoulConnectionString")));
-
+                        options.UseSqlServer(connetionString));
+                    services.AddSingleton(new SecSoulContextFactory(new DbContextOptionsBuilder()
+                        .UseSqlServer(connetionString).Options));
+                    
                     services.AddScoped<SecSoulRepository>();
                     services.AddScoped<SecSoulService>();
                     services.AddSingleton<ShellHelper>();

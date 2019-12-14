@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -31,12 +32,22 @@ namespace SecSoul.WebAPI
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            string connectionString = "";
 
-            services.AddDbContext<SecSoul.Model.Context.AuthenticationContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                connectionString = Configuration.GetConnectionString("IdentityConnection");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                connectionString = Configuration.GetConnectionString("LinuxIdentityConnection");
+            }
+            
+            services.AddDbContext<AuthenticationContext>(options =>
+            options.UseSqlServer(connectionString));
 
             services.AddDbContext<SecSoulContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+            options.UseSqlServer(connectionString));
 
             services.AddScoped<SecSoulRepository>();
 

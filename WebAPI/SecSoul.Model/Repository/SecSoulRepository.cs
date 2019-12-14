@@ -4,23 +4,24 @@ using SecSoul.Model.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SecSoul.Model.ContextFactories;
 
 namespace SecSoul.Model.Repository
 {
     public class SecSoulRepository
     {
-        private SecSoulContext _context { get; set; }
+        private SecSoulContextFactory _contextFactory;
         private ILogger _logger { get; set; }
-        public SecSoulRepository(SecSoulContext context, ILogger<SecSoulRepository> logger)
+        public SecSoulRepository(SecSoulContextFactory contextFactory, ILogger<SecSoulRepository> logger)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _logger = logger;
         }
         public void CreateScanRequest(ScanRequest scanRequest)
         {
             try
             {
-                using (var scope = new SecSoulContext())
+                using (var scope = _contextFactory.SecSoulContextCreate())
                 {
 
                     scope.Add(scanRequest);
@@ -37,11 +38,9 @@ namespace SecSoul.Model.Repository
         {
             try
             {
-                using (var scope = new SecSoulContext())
+                using (var scope = _contextFactory.SecSoulContextCreate())
                 {
-
                     return scope.ScanRequest.Where(x => x.IsProcessed == false).ToList();
-
                 }
             }
             catch (Exception e)

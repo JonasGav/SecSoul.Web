@@ -14,4 +14,11 @@
     <ProjectReference Include="..\SecSoul.Core\SecSoul.Core.csproj" />
     <ProjectReference Include="..\SecSoul.Model\SecSoul.Model.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
