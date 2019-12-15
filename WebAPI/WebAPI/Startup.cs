@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SecSoul.Model.Context;
+using SecSoul.Model.ContextFactories;
 using SecSoul.Model.Models;
 using SecSoul.Model.Repository;
 
@@ -48,6 +49,9 @@ namespace SecSoul.WebAPI
 
             services.AddDbContext<SecSoulContext>(options =>
             options.UseSqlServer(connectionString));
+            
+            services.AddSingleton(new SecSoulContextFactory(new DbContextOptionsBuilder()
+                .UseSqlServer(connectionString).Options));
 
             services.AddScoped<SecSoulRepository>();
 
