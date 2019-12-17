@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SecSoul.Model.Entity;
 using SecSoul.Model.Models;
 using SecSoul.Model.Repository;
@@ -16,26 +19,40 @@ namespace SecSoul.WebAPI.Controllers
     {
         private UserManager<ApplicationUser> _userManager;
         private SecSoulRepository _repository;
-        public SecSoulController(SecSoulRepository repository, UserManager<ApplicationUser> userManager)
+        private ILogger<SecSoulController> _logger;
+        public SecSoulController(SecSoulRepository repository, UserManager<ApplicationUser> userManager, ILogger<SecSoulController> logger)
         {
             _repository = repository;
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpPost]
         [Route("ScanWebsite")]
-        public async void ScanWebsite(ScanWebsiteJson obj)
+        public async Task<IActionResult> ScanWebsite(ScanWebsiteJson obj)
         {
-            string userId = User.Claims.First(c => c.Type == "UserID").Value;
-            var user = await _userManager.FindByIdAsync(userId);
-            var request = new ScanRequest()
+            try
             {
-                RequestDate = DateTime.Now,
-                WebsiteUrl = obj.WebsiteUrl,
-                WebsiteFtp = obj.WebsiteFtp,
-                UserId = user.Id
-            };
-            _repository.CreateScanRequest(request);
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                var user = await _userManager.FindByIdAsync(userId);
+                var request = new ScanRequest()
+                {
+                    RequestDate = DateTime.Now,
+                    WebsiteUrl = obj.WebsiteUrl,
+                    WebsiteFtp = obj.WebsiteFtp,
+                    UserId = user.Id
+                };
+                _repository.CreateScanRequest(request);
+                Response.StatusCode = 200;
+                return new EmptyResult();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception in SecSoulController, exception: ");
+                return BadRequest(new { message = "New scan request was unsuccessful, please try again later" });
+            }
+
+            
         }
         // GET api/values
         [HttpGet]

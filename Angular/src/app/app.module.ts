@@ -15,6 +15,11 @@ import { HomeComponent } from './home/home.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { ScanPanelModule } from './scan-panel/scan-panel.module';
+import { ScanPanelCreateComponent } from './scan-panel/scan-panel-create/scan-panel-create.component';
+import { ScanPanelListComponent } from './scan-panel/scan-panel-list/scan-panel-list.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
@@ -24,14 +29,18 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     LoginComponent,
     HomeComponent,
     AdminPanelComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,
+    ScanPanelModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    BrowserModule,
+    AgGridModule.withComponents([]),
     ToastrModule.forRoot({
       progressBar: true
     }),
