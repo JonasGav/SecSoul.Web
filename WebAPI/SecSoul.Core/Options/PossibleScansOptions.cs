@@ -5,6 +5,7 @@ namespace SecSoul.Core.Options
     public class PossibleScansOptions
     {
         public IList<Scans> Scans { get; set; }
+        public string ScanOuputLocation { get; set; }
     }
     public class Scans
     {

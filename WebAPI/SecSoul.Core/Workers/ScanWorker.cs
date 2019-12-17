@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,12 +15,14 @@ namespace SecSoul.Core.Workers
         private PossibleScansOptions _possibleScans;
         private SecSoulService _secSoulService;
         private ShellHelper _shellHelper;
-        public ScanWorker(ILogger<ScanWorker> logger, SecSoulService secSoulService, ShellHelper shellHelper, IOptionsMonitor<PossibleScansOptions> scanOptions)
+        private ScanHelper _scanHelper;
+        public ScanWorker(ILogger<ScanWorker> logger, SecSoulService secSoulService,  ScanHelper scanHelper, ShellHelper shellHelper, IOptionsMonitor<PossibleScansOptions> scanOptions)
         {
             _logger = logger;
             _secSoulService = secSoulService;
             _shellHelper = shellHelper;
             _possibleScans = scanOptions.CurrentValue;
+            _scanHelper = scanHelper;
         }
         public async Task SyncMain()
         {
@@ -30,15 +31,20 @@ namespace SecSoul.Core.Workers
                 var unprocessedRequests = _secSoulService.GetUnprocessedScanRequest();
                 foreach (var request in unprocessedRequests)
                 {
-                    foreach (var scan in _possibleScans.Scans)
-                    {
-                        _shellHelper.ShellExecute( string.Format(scan.Script, "Localhost", request.UserId));
-                    }
+
+                    var scanTasksList = new List<Task>();
+                    scanTasksList.Add(Task.Run(() => _scanHelper.NmapHelper(request)));
+                    
+                    
+                    await Task.WhenAll(scanTasksList);
+                    request.IsProcessed = true;
                 }
+
+                _secSoulService.UpdateUnprocessedScanRequest(unprocessedRequests);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Exception in ScanWorker, exception: ");
                 throw;
             }
         }

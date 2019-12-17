@@ -1,29 +1,36 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace SecSoul.Core.Helpers
 {
 
     public class ShellHelper
     {
-        public static bool IsWindows() =>
+        private bool IsWindows() =>
             RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
-        public static bool IsLinux() =>
+        private bool IsLinux() =>
             RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-        public string ShellExecute(string cmd)
+        private ILogger<ShellHelper> _logger;
+        public ShellHelper(ILogger<ShellHelper> logger)
         {
-            if (IsLinux())
-                return LinuxBash(cmd);
-            else if (IsWindows())
-                return WindowsBash(cmd);
-
-            return "";
+            _logger = logger;
         }
 
-        private static string LinuxBash(string cmd)
+        public async void ShellExecute(string cmd)
+        {
+            if (IsLinux())
+                LinuxBash(cmd);
+            else if (IsWindows())
+                WindowsBash(cmd);
+            
+        }
+
+        private async void LinuxBash(string cmd)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");
 
@@ -41,10 +48,10 @@ namespace SecSoul.Core.Helpers
             process.Start();
             string result = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
-            return result;
+            _logger.LogDebug($"Linux Bash finished process with result: {result}");
 
         }
-        private static string WindowsBash(string cmd)
+        private async void WindowsBash(string cmd)
         {
 
             int exitCode;
@@ -67,12 +74,8 @@ namespace SecSoul.Core.Helpers
             string error = process.StandardError.ReadToEnd();
 
             exitCode = process.ExitCode;
-
-            Console.WriteLine("output>>" + (String.IsNullOrEmpty(output) ? "(none)" : output));
-            Console.WriteLine("error>>" + (String.IsNullOrEmpty(error) ? "(none)" : error));
-            Console.WriteLine("ExitCode: " + exitCode.ToString(), "ExecuteCommand");
             process.Close();
-            return output;
+            _logger.LogDebug($"Windows Bash finished process with result \nOUTPUT: {output} \nERROR:{error} \nEXIT CODE: {exitCode}");
 
         }
     }

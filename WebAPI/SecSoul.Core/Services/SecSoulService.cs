@@ -24,10 +24,22 @@ namespace SecSoul.Core.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError("");
                 throw;
             }
         }
 
+        public void UpdateUnprocessedScanRequest(IList<ScanRequest> unprocessedRequests)
+        {
+            try
+            {
+                _repository.UpdateUnprocessedScanRequest(unprocessedRequests);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

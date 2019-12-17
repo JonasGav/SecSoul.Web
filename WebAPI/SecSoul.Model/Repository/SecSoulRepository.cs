@@ -50,5 +50,22 @@ namespace SecSoul.Model.Repository
             }
             
         }
+
+        public void UpdateUnprocessedScanRequest(IList<ScanRequest> unprocessedRequests)
+        {
+            try
+            {
+                using (var scope = _contextFactory.SecSoulContextCreate())
+                {
+                    scope.ScanRequest.UpdateRange(unprocessedRequests);
+                    scope.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error at CreateScanRequest", e);
+                throw;
+            }
+        }
     }
 }

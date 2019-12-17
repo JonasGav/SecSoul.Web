@@ -54,6 +54,7 @@ namespace SecSoul.Service
                     services.AddScoped<SecSoulRepository>();
                     services.AddScoped<SecSoulService>();
                     services.AddSingleton<ShellHelper>();
+                    services.AddSingleton<ScanHelper>();
 
                     services.Configure<TimersOption>(hostContext.Configuration.GetSection("Timers"));
                     services.Configure<PossibleScansOptions>(hostContext.Configuration.GetSection("PossibleScans"));
