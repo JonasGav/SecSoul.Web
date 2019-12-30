@@ -54,6 +54,10 @@ export class UserService {
     }
     return this.http.post(this.BaseURI + '/secsoul/scanWebsite', body);
   }
+  GetScanWebsiteList() {
+
+    return this.http.get(this.BaseURI + '/secsoul/GetScanWebsiteList');
+  }
 
   getUserProfile() {
     return this.http.get(this.BaseURI + '/UserProfile');

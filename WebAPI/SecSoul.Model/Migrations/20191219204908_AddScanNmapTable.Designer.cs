@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SecSoul.Model.Context;
 
 namespace SecSoul.Model.Migrations
 {
     [DbContext(typeof(SecSoulContext))]
-    partial class SecSoulContextModelSnapshot : ModelSnapshot
+    [Migration("20191219204908_AddScanNmapTable")]
+    partial class AddScanNmapTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,30 +223,6 @@ namespace SecSoul.Model.Migrations
                     b.ToTable("ScanRequest");
                 });
 
-            modelBuilder.Entity("SecSoul.Model.Entity.ScanVirusTotal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ScanRequestId");
-
-                    b.Property<string>("ScanResult")
-                        .IsUnicode(false);
-
-                    b.HasKey("Id")
-                        .HasName("ScanVirusTotal_pk")
-                        .HasAnnotation("SqlServer:Clustered", false);
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasName("ScanVirusTotal_Id_uindex");
-
-                    b.HasIndex("ScanRequestId");
-
-                    b.ToTable("ScanVirusTotal");
-                });
-
             modelBuilder.Entity("SecSoul.Model.Entity.AspNetRoleClaims", b =>
                 {
                     b.HasOne("SecSoul.Model.Entity.AspNetRoles", "Role")
@@ -296,15 +274,6 @@ namespace SecSoul.Model.Migrations
                     b.HasOne("SecSoul.Model.Entity.AspNetUsers", "User")
                         .WithMany("ScanRequest")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("SecSoul.Model.Entity.ScanVirusTotal", b =>
-                {
-                    b.HasOne("SecSoul.Model.Entity.ScanRequest", "ScanRequest")
-                        .WithMany("ScanVirusTotal")
-                        .HasForeignKey("ScanRequestId")
-                        .HasConstraintName("ScanVirusTotal_ScanRequest_Id_fk")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

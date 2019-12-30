@@ -19,7 +19,7 @@ namespace SecSoul.Core.Workers
         public ScanWorker(ILogger<ScanWorker> logger, SecSoulService secSoulService,  ScanHelper scanHelper, ShellHelper shellHelper, IOptionsMonitor<PossibleScansOptions> scanOptions)
         {
             _logger = logger;
-            _secSoulService = secSoulService;
+            _secSoulService = secSoulService;    
             _shellHelper = shellHelper;
             _possibleScans = scanOptions.CurrentValue;
             _scanHelper = scanHelper;
@@ -33,8 +33,9 @@ namespace SecSoul.Core.Workers
                 {
 
                     var scanTasksList = new List<Task>();
-                    scanTasksList.Add(Task.Run(() => _scanHelper.NmapHelper(request)));
                     
+                    scanTasksList.Add(Task.Run(() => _scanHelper.NmapHelper(request)));
+                    //scanTasksList.Add(Task.Run(() => _scanHelper.VirusTotalHelper(request)));
                     
                     await Task.WhenAll(scanTasksList);
                     request.IsProcessed = true;

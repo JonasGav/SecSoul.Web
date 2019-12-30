@@ -4,7 +4,10 @@ using SecSoul.Model.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SecSoul.Model.ContextFactories;
+using SecSoul.Model.Models;
 
 namespace SecSoul.Model.Repository
 {
@@ -65,6 +68,29 @@ namespace SecSoul.Model.Repository
             {
                 _logger.LogError("Error at CreateScanRequest", e);
                 throw;
+            }
+        }
+        public ScanNmap UpdateUnprocessedScanRequest(int Id)
+        {
+            try
+            {
+                using (var scope = _contextFactory.SecSoulContextCreate())
+                {
+                    return scope.ScanNmap.FirstOrDefault(x => x.Id == Id);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error at CreateScanRequest", e);
+                throw;
+            }
+        }
+
+        public IList<ScanRequest> GetScanRequestByUser(Task<ApplicationUser> user)
+        {
+            using (var scope = _contextFactory.SecSoulContextCreate())
+            {
+                return scope.ScanRequest.Where(x => x.UserId == user.Result.Id).Include(x => x.ScanNmap).ToList();
             }
         }
     }

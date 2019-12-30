@@ -18,6 +18,7 @@ namespace SecSoul.Model.Context
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<ScanRequest> ScanRequest { get; set; }
+        public virtual DbSet<ScanNmap> ScanNmap { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -110,12 +111,48 @@ namespace SecSoul.Model.Context
                 entity.Property(e => e.UserName).HasMaxLength(256);
             });
 
+            modelBuilder.Entity<ScanNmap>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .HasName("ScanNmap_pk")
+                    .ForSqlServerIsClustered(false);
+
+                entity.HasIndex(e => e.Id)
+                    .HasName("ScanNmap_Id_uindex")
+                    .IsUnique();
+
+                entity.Property(e => e.ScanResult).IsUnicode(false);
+
+                entity.HasOne(d => d.ScanRequest)
+                    .WithMany(p => p.ScanNmap)
+                    .HasForeignKey(d => d.ScanRequestId)
+                    .HasConstraintName("ScanNmap_ScanRequest_Id_fk");
+            });
+            
+            modelBuilder.Entity<ScanVirusTotal>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .HasName("ScanVirusTotal_pk")
+                    .ForSqlServerIsClustered(false);
+
+                entity.HasIndex(e => e.Id)
+                    .HasName("ScanVirusTotal_Id_uindex")
+                    .IsUnique();
+
+                entity.Property(e => e.ScanResult).IsUnicode(false);
+
+                entity.HasOne(d => d.ScanRequest)
+                    .WithMany(p => p.ScanVirusTotal)
+                    .HasForeignKey(d => d.ScanRequestId)
+                    .HasConstraintName("ScanVirusTotal_ScanRequest_Id_fk");
+            });
+
+
             modelBuilder.Entity<ScanRequest>(entity =>
             {
-                entity.HasKey(e => new { e.Id});
+                entity.HasIndex(e => e.UserId);
 
                 entity.Property(e => e.RequestDate).HasColumnType("datetime");
-                entity.Property(e => e.IsProcessed).HasDefaultValue(false);
 
                 entity.Property(e => e.WebsiteFtp)
                     .HasMaxLength(50)
@@ -130,7 +167,6 @@ namespace SecSoul.Model.Context
                     .WithMany(p => p.ScanRequest)
                     .HasForeignKey(d => d.UserId);
             });
-
             OnModelCreatingPartial(modelBuilder);
         }
 

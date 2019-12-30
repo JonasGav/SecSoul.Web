@@ -6,6 +6,7 @@ namespace SecSoul.Core.Options
     {
         public IList<Scans> Scans { get; set; }
         public string ScanOuputLocation { get; set; }
+        public string VirusTotalApiKey { get; set; }
     }
     public class Scans
     {

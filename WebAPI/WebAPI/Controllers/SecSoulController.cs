@@ -56,9 +56,26 @@ namespace SecSoul.WebAPI.Controllers
         }
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        [Route("GetScanWebsiteList")]
+        public ActionResult<IList<ScanRequestGridResult>> Get()
         {
-            return new string[] { "value1", "value2" };
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = _userManager.FindByIdAsync(userId);
+            
+            var dbResult = _repository.GetScanRequestByUser(user);
+            var results = dbResult.Select(item => new ScanRequestGridResult()
+                {
+                    Id = item.Id,
+                    WebsiteUrl = item.WebsiteUrl,
+                    WebsiteFtp = item.WebsiteFtp,
+                    RequestDate = item.RequestDate,
+                    IsProcessed = item.IsProcessed,
+                    NmapScanned = item.ScanNmap.Any()
+                })
+                .ToList();
+
+            var returnResult = new ActionResult<IList<ScanRequestGridResult>>(results);
+            return returnResult;
         }
 
         // GET api/values/5
