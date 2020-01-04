@@ -33,18 +33,27 @@ namespace SecSoul.WebAPI.Controllers
         {
             try
             {
-                string userId = User.Claims.First(c => c.Type == "UserID").Value;
-                var user = await _userManager.FindByIdAsync(userId);
-                var request = new ScanRequest()
+                Uri uriResult;
+                if (Uri.TryCreate(obj.WebsiteUrl, UriKind.Absolute, out uriResult)
+                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
                 {
-                    RequestDate = DateTime.Now,
-                    WebsiteUrl = obj.WebsiteUrl,
-                    WebsiteFtp = obj.WebsiteFtp,
-                    UserId = user.Id
-                };
-                _repository.CreateScanRequest(request);
-                Response.StatusCode = 200;
-                return new EmptyResult();
+                    string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                    var user = await _userManager.FindByIdAsync(userId);
+                    var request = new ScanRequest()
+                    {
+                        RequestDate = DateTime.Now,
+                        WebsiteUrl = obj.WebsiteUrl,
+                        WebsiteFtp = obj.WebsiteFtp,
+                        UserId = user.Id
+                    };
+                    //_repository.CreateScanRequest(request);
+                    Response.StatusCode = 200;
+                    return new EmptyResult();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception e)
             {
@@ -70,7 +79,9 @@ namespace SecSoul.WebAPI.Controllers
                     WebsiteFtp = item.WebsiteFtp,
                     RequestDate = item.RequestDate,
                     IsProcessed = item.IsProcessed,
-                    NmapScanned = item.ScanNmap.Any()
+                    NmapScanned = item.ScanNmap.Any(),
+                    DirbScanned = item.ScanDirb.Any(),
+                    VirusTotalScanned = item.ScanVirusTotal.Any()
                 })
                 .ToList();
 

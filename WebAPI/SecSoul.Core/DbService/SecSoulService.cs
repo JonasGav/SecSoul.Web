@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using SecSoul.Model.Entity;
 using SecSoul.Model.Repository;
 
-namespace SecSoul.Core.Services
+namespace SecSoul.Core.DbService
 {
     public class SecSoulService
     {

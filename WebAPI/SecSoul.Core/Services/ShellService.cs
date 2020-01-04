@@ -1,13 +1,11 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
-using NLog;
 
-namespace SecSoul.Core.Helpers
+namespace SecSoul.Core.Services
 {
 
-    public class ShellHelper
+    public class ShellService
     {
         private bool IsWindows() =>
             RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -15,8 +13,8 @@ namespace SecSoul.Core.Helpers
         private bool IsLinux() =>
             RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-        private ILogger<ShellHelper> _logger;
-        public ShellHelper(ILogger<ShellHelper> logger)
+        private ILogger<ShellService> _logger;
+        public ShellService(ILogger<ShellService> logger)
         {
             _logger = logger;
         }

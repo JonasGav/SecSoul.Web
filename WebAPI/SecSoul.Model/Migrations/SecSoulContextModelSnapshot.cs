@@ -168,6 +168,31 @@ namespace SecSoul.Model.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("SecSoul.Model.Entity.ScanDirb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FoundUrl");
+
+                    b.Property<bool>("IsDirectory");
+
+                    b.Property<int>("ScanRequestId");
+
+                    b.HasKey("Id")
+                        .HasName("ScanDirb_pk")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("ScanDirb_Id_uindex");
+
+                    b.HasIndex("ScanRequestId");
+
+                    b.ToTable("ScanDirb");
+                });
+
             modelBuilder.Entity("SecSoul.Model.Entity.ScanNmap", b =>
                 {
                     b.Property<int>("Id")
@@ -198,6 +223,14 @@ namespace SecSoul.Model.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("FtpPassword")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<string>("FtpUsername")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
                     b.Property<bool>("IsProcessed");
 
                     b.Property<DateTime>("RequestDate")
@@ -227,9 +260,11 @@ namespace SecSoul.Model.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ScanProvider");
+
                     b.Property<int>("ScanRequestId");
 
-                    b.Property<string>("ScanResult")
+                    b.Property<bool>("ScanResult")
                         .IsUnicode(false);
 
                     b.HasKey("Id")
@@ -279,6 +314,15 @@ namespace SecSoul.Model.Migrations
                     b.HasOne("SecSoul.Model.Entity.AspNetUsers", "User")
                         .WithMany("AspNetUserTokens")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SecSoul.Model.Entity.ScanDirb", b =>
+                {
+                    b.HasOne("SecSoul.Model.Entity.ScanRequest", "ScanRequest")
+                        .WithMany("ScanDirb")
+                        .HasForeignKey("ScanRequestId")
+                        .HasConstraintName("ScanDirb_ScanRequest_Id_fk")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

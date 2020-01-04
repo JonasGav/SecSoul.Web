@@ -42,6 +42,8 @@ export class ScanPanelListComponent implements OnInit {
       { headerName: 'Request Date', field: 'requestDate' },
       { headerName: 'Is finished', field: 'isProcessed' },
       { headerName: 'Nmap scanned', field: 'nmapScanned' },
+      { headerName: 'Page enumeration completed', field: 'dirbScanned' },
+      { headerName: 'Virus total Api Scanned', field: 'virusTotalScanned' },
       {
         headerName: "Child/Parent",
         field: "value",

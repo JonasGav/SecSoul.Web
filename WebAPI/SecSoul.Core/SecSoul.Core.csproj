@@ -14,4 +14,8 @@
     <ProjectReference Include="..\SecSoul.Model\SecSoul.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers" />
+  </ItemGroup>
+
 </Project>

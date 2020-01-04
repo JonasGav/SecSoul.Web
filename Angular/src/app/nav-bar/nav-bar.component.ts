@@ -12,7 +12,8 @@ export class NavBarComponent implements OnInit {
 
   userDetails;
 
-  constructor(private router: Router, private service: UserService, private toastr: ToastrService) { }
+  constructor(private router: Router, private service: UserService, private toastr: ToastrService) {
+   }
 
   ngOnInit() {
     this.service.getUserProfile().subscribe(
@@ -26,6 +27,7 @@ export class NavBarComponent implements OnInit {
   }
 
   onLogout() {
+    console.log(this.userDetails);
     localStorage.removeItem('token');
     this.router.navigate(['/user/login']);
   }

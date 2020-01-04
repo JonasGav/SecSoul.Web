@@ -43,7 +43,7 @@ namespace SecSoul.Model.Repository
             {
                 using (var scope = _contextFactory.SecSoulContextCreate())
                 {
-                    return scope.ScanRequest.Where(x => x.IsProcessed == false).ToList();
+                    return scope.ScanRequest.Where(x => x.IsProcessed == false).Include(x => x.ScanDirb).ToList();
                 }
             }
             catch (Exception e)
@@ -90,7 +90,11 @@ namespace SecSoul.Model.Repository
         {
             using (var scope = _contextFactory.SecSoulContextCreate())
             {
-                return scope.ScanRequest.Where(x => x.UserId == user.Result.Id).Include(x => x.ScanNmap).ToList();
+                return scope.ScanRequest.Where(x => x.UserId == user.Result.Id).
+                    Include(x => x.ScanNmap)
+                    .Include(x => x.ScanDirb)
+                    .Include(x => x.ScanVirusTotal)
+                    .ToList();
             }
         }
     }

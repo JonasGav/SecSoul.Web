@@ -10,9 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SecSoul.Core;
-using SecSoul.Core.Helpers;
+using SecSoul.Core.DbService;
 using SecSoul.Core.Mains;
 using SecSoul.Core.Options;
+using SecSoul.Core.Scans;
 using SecSoul.Core.Services;
 using SecSoul.Core.Workers;
 using SecSoul.Model.Context;
@@ -53,8 +54,13 @@ namespace SecSoul.Service
                     
                     services.AddScoped<SecSoulRepository>();
                     services.AddScoped<SecSoulService>();
-                    services.AddSingleton<ShellHelper>();
-                    services.AddSingleton<ScanHelper>();
+                    services.AddSingleton<ShellService>();
+                    
+                    services.AddSingleton<NmapScan>();
+                    services.AddSingleton<VirusTotalScan>();
+                    services.AddSingleton<HashCheckScan>();
+                    services.AddSingleton<DirbScan>();
+                    services.AddSingleton<WebCrawlerService>();
 
                     services.Configure<TimersOption>(hostContext.Configuration.GetSection("Timers"));
                     services.Configure<PossibleScansOptions>(hostContext.Configuration.GetSection("PossibleScans"));

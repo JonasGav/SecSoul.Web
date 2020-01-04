@@ -19,6 +19,8 @@ namespace SecSoul.Model.Context
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<ScanRequest> ScanRequest { get; set; }
         public virtual DbSet<ScanNmap> ScanNmap { get; set; }
+        public virtual DbSet<ScanVirusTotal> ScanVirusTotal { get; set; }
+        public virtual DbSet<ScanDirb> ScanDirb { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -146,8 +148,23 @@ namespace SecSoul.Model.Context
                     .HasForeignKey(d => d.ScanRequestId)
                     .HasConstraintName("ScanVirusTotal_ScanRequest_Id_fk");
             });
+            
+            modelBuilder.Entity<ScanDirb>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .HasName("ScanDirb_pk")
+                    .ForSqlServerIsClustered(false);
 
+                entity.HasIndex(e => e.Id)
+                    .HasName("ScanDirb_Id_uindex")
+                    .IsUnique();
 
+                entity.HasOne(d => d.ScanRequest)
+                    .WithMany(p => p.ScanDirb)
+                    .HasForeignKey(d => d.ScanRequestId)
+                    .HasConstraintName("ScanDirb_ScanRequest_Id_fk");
+            });
+            
             modelBuilder.Entity<ScanRequest>(entity =>
             {
                 entity.HasIndex(e => e.UserId);
@@ -156,6 +173,14 @@ namespace SecSoul.Model.Context
 
                 entity.Property(e => e.WebsiteFtp)
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+                
+                entity.Property(e => e.FtpUsername)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+                
+                entity.Property(e => e.FtpPassword)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.WebsiteUrl)
