@@ -14,6 +14,7 @@ namespace SecSoul.WebAPI.Models
         public bool NmapScanned { get; set; }
         public bool DirbScanned { get; set; }
         public bool VirusTotalScanned { get; set; }
+        public bool HashCheckCompleted { get; set; }
         
     }
 }

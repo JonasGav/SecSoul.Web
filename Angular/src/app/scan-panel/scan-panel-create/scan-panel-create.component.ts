@@ -12,9 +12,13 @@ import { ToastrService } from 'ngx-toastr';
 export class ScanPanelCreateComponent implements OnInit {
 
   userDetails;
+  
   formModel = {
     WebsiteUrl: '',
-    WebsiteFtp: ''
+    NeedFtp: false,
+    FtpIp: '',
+    FtpUsername: '',
+    FtpPassword: ''
   }
 
   constructor(private router: Router, private service: UserService, private toastr: ToastrService) { }
@@ -33,9 +37,13 @@ export class ScanPanelCreateComponent implements OnInit {
   onSubmit(form: NgForm) {
     this.service.ScanWebsite(form.value).subscribe( (res: any) => {
       this.toastr.info('Scan was successfully registered', 'Scan Request');
+      NeedFtp: false;
       this.formModel = {
         WebsiteUrl: '',
-        WebsiteFtp: ''
+        NeedFtp: false,
+        FtpIp: '',
+        FtpUsername: '',
+        FtpPassword: ''
       }
     },
     err => {
@@ -43,9 +51,13 @@ export class ScanPanelCreateComponent implements OnInit {
         this.toastr.error('Failed to register scan request', 'Scan Request');
       else
         console.log(err);
+        NeedFtp: false;
       this.formModel = {
         WebsiteUrl: '',
-        WebsiteFtp: ''
+        NeedFtp: false,
+        FtpIp: '',
+        FtpUsername: '',
+        FtpPassword: ''
       }
     });
   }

@@ -61,6 +61,7 @@ namespace SecSoul.Service
                     services.AddSingleton<HashCheckScan>();
                     services.AddSingleton<DirbScan>();
                     services.AddSingleton<WebCrawlerService>();
+                    services.AddSingleton<HashCheckScan>();
 
                     services.Configure<TimersOption>(hostContext.Configuration.GetSection("Timers"));
                     services.Configure<PossibleScansOptions>(hostContext.Configuration.GetSection("PossibleScans"));

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/shared/user.service';
 import { ToastrService } from 'ngx-toastr';
 import {ChildMessageRenderer} from '../renderer/child-message-renderer.component'
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-scan-panel-list',
@@ -42,10 +43,8 @@ export class ScanPanelListComponent implements OnInit {
       { headerName: 'Request Date', field: 'requestDate' },
       { headerName: 'Is finished', field: 'isProcessed' },
       { headerName: 'Nmap scanned', field: 'nmapScanned' },
-      { headerName: 'Page enumeration completed', field: 'dirbScanned' },
-      { headerName: 'Virus total Api Scanned', field: 'virusTotalScanned' },
       {
-        headerName: "Child/Parent",
+        headerName: "Download Report",
         field: "value",
         cellRenderer: "childMessageRenderer",
         colId: "params",
@@ -74,7 +73,6 @@ export class ScanPanelListComponent implements OnInit {
       },
     );
   }
-
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
@@ -84,11 +82,11 @@ export class ScanPanelListComponent implements OnInit {
 
   onBtnClick(e) {
     this.rowDataClicked = e.rowData;
-    console.log(this.rowDataClicked);
   }
 
   methodFromParent(cell) {
     // alert("Parent Component Method from " + cell + "!");
-    this.toastr.info("It works")
+    this.toastr.info("Please wait for report");
+    this.service.DownloadFile(cell.id);
   }
 }

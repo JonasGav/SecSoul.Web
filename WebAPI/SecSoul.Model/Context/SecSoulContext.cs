@@ -21,6 +21,7 @@ namespace SecSoul.Model.Context
         public virtual DbSet<ScanNmap> ScanNmap { get; set; }
         public virtual DbSet<ScanVirusTotal> ScanVirusTotal { get; set; }
         public virtual DbSet<ScanDirb> ScanDirb { get; set; }
+        public virtual DbSet<ScanHashCheck> ScanHashCheck { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -163,6 +164,37 @@ namespace SecSoul.Model.Context
                     .WithMany(p => p.ScanDirb)
                     .HasForeignKey(d => d.ScanRequestId)
                     .HasConstraintName("ScanDirb_ScanRequest_Id_fk");
+            });
+            
+            modelBuilder.Entity<ScanHashCheck>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .HasName("ScanHashCheck_pk")
+                    .ForSqlServerIsClustered(false);
+
+                entity.HasIndex(e => e.Id)
+                    .HasName("ScanHashCheck_Id_uindex")
+                    .IsUnique();
+                
+                entity.Property(e => e.Hash)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+                
+                entity.Property(e => e.Location)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+                
+                entity.Property(e => e.MalwarePercentage)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.ScanRequest)
+                    .WithMany(p => p.ScanHashCheck)
+                    .HasForeignKey(d => d.ScanRequestId)
+                    .HasConstraintName("ScanHashCheck_ScanRequest_Id_fk");
             });
             
             modelBuilder.Entity<ScanRequest>(entity =>

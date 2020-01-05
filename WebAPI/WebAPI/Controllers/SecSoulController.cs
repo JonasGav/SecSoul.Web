@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using SecSoul.Model.Entity;
 using SecSoul.Model.Models;
 using SecSoul.Model.Repository;
+using SecSoul.WebAPI.Helpers;
 using SecSoul.WebAPI.Models;
 
 namespace SecSoul.WebAPI.Controllers
@@ -20,11 +24,15 @@ namespace SecSoul.WebAPI.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SecSoulRepository _repository;
         private ILogger<SecSoulController> _logger;
-        public SecSoulController(SecSoulRepository repository, UserManager<ApplicationUser> userManager, ILogger<SecSoulController> logger)
+        private XmlConverter _xmlConverter;
+        private HtmlHelper _htmlHelper;
+        public SecSoulController(SecSoulRepository repository, UserManager<ApplicationUser> userManager, ILogger<SecSoulController> logger, XmlConverter xmlConverter, HtmlHelper htmlHelper)
         {
             _repository = repository;
             _userManager = userManager;
             _logger = logger;
+            _xmlConverter = xmlConverter;
+            _htmlHelper = htmlHelper;
         }
 
         [HttpPost]
@@ -44,9 +52,11 @@ namespace SecSoul.WebAPI.Controllers
                         RequestDate = DateTime.Now,
                         WebsiteUrl = obj.WebsiteUrl,
                         WebsiteFtp = obj.WebsiteFtp,
+                        FtpUsername = obj.FtpUsername,
+                        FtpPassword = obj.FtpPassword,
                         UserId = user.Id
                     };
-                    //_repository.CreateScanRequest(request);
+                    _repository.CreateScanRequest(request);
                     Response.StatusCode = 200;
                     return new EmptyResult();
                 }
@@ -87,6 +97,33 @@ namespace SecSoul.WebAPI.Controllers
 
             var returnResult = new ActionResult<IList<ScanRequestGridResult>>(results);
             return returnResult;
+        }
+        [HttpGet]
+        [Route("Download")]
+        public IActionResult DownloadFile(int requestId)
+        {
+            var data = _repository.GetScanRequestById(requestId);
+            if (data.ScanNmap.FirstOrDefault() == null)
+            {
+                return BadRequest();
+            }
+            
+            var htmlContent = _xmlConverter.TransformXMLToHTML(data.ScanNmap.FirstOrDefault()?.ScanResult);
+
+            htmlContent = _htmlHelper.AddDirbResults(htmlContent, data);
+            htmlContent = _htmlHelper.AddVirusTotalResults(htmlContent, data);
+            htmlContent = _htmlHelper.AddHashCheckResults(htmlContent, data);
+            
+
+            
+            byte[] buff = Encoding.ASCII.GetBytes(htmlContent);
+
+            // get the file and convert it into a bytearray
+            return new FileContentResult(buff, new 
+                MediaTypeHeaderValue("application/octet"))
+            {
+                FileDownloadName = "result.html"
+            };
         }
 
         // GET api/values/5

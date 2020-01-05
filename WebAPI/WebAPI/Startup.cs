@@ -14,6 +14,8 @@ using SecSoul.Model.Context;
 using SecSoul.Model.ContextFactories;
 using SecSoul.Model.Models;
 using SecSoul.Model.Repository;
+using SecSoul.WebAPI.Helpers;
+using SecSoul.WebAPI.Options;
 
 namespace SecSoul.WebAPI
 {
@@ -54,7 +56,10 @@ namespace SecSoul.WebAPI
                 .UseSqlServer(connectionString).Options));
 
             services.AddScoped<SecSoulRepository>();
+            services.AddScoped<XmlConverter>();
+            services.AddScoped<HtmlHelper>();
 
+            services.Configure<OtherSettings>(Configuration.GetSection("OtherSettings"));
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SecSoul.Model.Context.AuthenticationContext>();

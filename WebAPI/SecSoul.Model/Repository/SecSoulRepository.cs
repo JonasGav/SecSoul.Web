@@ -70,21 +70,6 @@ namespace SecSoul.Model.Repository
                 throw;
             }
         }
-        public ScanNmap UpdateUnprocessedScanRequest(int Id)
-        {
-            try
-            {
-                using (var scope = _contextFactory.SecSoulContextCreate())
-                {
-                    return scope.ScanNmap.FirstOrDefault(x => x.Id == Id);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Error at CreateScanRequest", e);
-                throw;
-            }
-        }
 
         public IList<ScanRequest> GetScanRequestByUser(Task<ApplicationUser> user)
         {
@@ -95,6 +80,17 @@ namespace SecSoul.Model.Repository
                     .Include(x => x.ScanDirb)
                     .Include(x => x.ScanVirusTotal)
                     .ToList();
+            }
+        }
+        public ScanRequest GetScanRequestById(int id)
+        {
+            using (var scope = _contextFactory.SecSoulContextCreate())
+            {
+                return scope.ScanRequest.Include(x => x.ScanNmap)
+                    .Include(x => x.ScanDirb)
+                    .Include(x => x.ScanHashCheck)
+                    .Include(x => x.ScanVirusTotal)
+                    .FirstOrDefault(x => x.Id == id);
             }
         }
     }

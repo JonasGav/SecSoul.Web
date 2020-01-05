@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import {saveAs} from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -50,10 +51,21 @@ export class UserService {
   ScanWebsite(formData) {
     var body = {
       WebsiteUrl: formData.WebsiteUrl,
-      WebsiteFtp: formData.WebsiteFtp,
+      WebsiteFtp: formData.FtpIp,
+      FtpUsername: formData.FtpUsername,
+      FtpPassword: formData.FtpPassword,
     }
     return this.http.post(this.BaseURI + '/secsoul/scanWebsite', body);
   }
+
+  public DownloadFile(requestId: Number) {
+    const params = new HttpParams()
+  .set('requestId', requestId.toString());
+    this.http.get(this.BaseURI + '/secsoul/Download', { params, responseType: 'blob' }).subscribe(blob => {
+       saveAs(blob, 'result.html')
+    });
+  }
+
   GetScanWebsiteList() {
 
     return this.http.get(this.BaseURI + '/secsoul/GetScanWebsiteList');

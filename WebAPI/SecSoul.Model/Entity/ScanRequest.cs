@@ -10,6 +10,7 @@ namespace SecSoul.Model.Entity
             ScanNmap = new HashSet<ScanNmap>();
             ScanVirusTotal = new HashSet<ScanVirusTotal>();
             ScanDirb = new HashSet<ScanDirb>();
+            ScanHashCheck = new HashSet<ScanHashCheck>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace SecSoul.Model.Entity
         public virtual ICollection<ScanNmap> ScanNmap { get; set; }
         public virtual ICollection<ScanVirusTotal> ScanVirusTotal { get; set; }
         public virtual ICollection<ScanDirb> ScanDirb { get; set; }
+        public virtual ICollection<ScanHashCheck> ScanHashCheck { get; set; }
     }
 }

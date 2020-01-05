@@ -193,6 +193,42 @@ namespace SecSoul.Model.Migrations
                     b.ToTable("ScanDirb");
                 });
 
+            modelBuilder.Entity("SecSoul.Model.Entity.ScanHashCheck", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(false);
+
+                    b.Property<string>("MalwarePercentage")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<int>("ScanRequestId");
+
+                    b.HasKey("Id")
+                        .HasName("ScanHashCheck_pk")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("ScanHashCheck_Id_uindex");
+
+                    b.HasIndex("ScanRequestId");
+
+                    b.ToTable("ScanHashCheck");
+                });
+
             modelBuilder.Entity("SecSoul.Model.Entity.ScanNmap", b =>
                 {
                     b.Property<int>("Id")
@@ -323,6 +359,15 @@ namespace SecSoul.Model.Migrations
                         .WithMany("ScanDirb")
                         .HasForeignKey("ScanRequestId")
                         .HasConstraintName("ScanDirb_ScanRequest_Id_fk")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SecSoul.Model.Entity.ScanHashCheck", b =>
+                {
+                    b.HasOne("SecSoul.Model.Entity.ScanRequest", "ScanRequest")
+                        .WithMany("ScanHashCheck")
+                        .HasForeignKey("ScanRequestId")
+                        .HasConstraintName("ScanHashCheck_ScanRequest_Id_fk")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

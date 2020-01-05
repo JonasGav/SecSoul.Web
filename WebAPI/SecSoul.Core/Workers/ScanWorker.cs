@@ -46,39 +46,27 @@ namespace SecSoul.Core.Workers
                 var unprocessedRequests = _secSoulService.GetUnprocessedScanRequest();
                 foreach (var request in unprocessedRequests)
                 {
-
+                    _logger.LogDebug("Starting scan for {0} request", request.Id);
+                    
                     var scanTasksList = new List<Task>();
 
-                    //scanTasksList.Add(Task.Run(() => _nmapScan.ExecuteNmapScan(request)));
-                    //
-                    // scanTasksList.Add(Task.Run(() => _dirbScan.ExecuteDirbScan(request)));
-                    //
-                    // scanTasksList.Add(Task.Run(() => _virusTotalScan.ExecuteVirusTotalScan(request)));
-                    //
-                     scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
+                    scanTasksList.Add(Task.Run(() => _nmapScan.ExecuteNmapScan(request)));
+                    
+                    scanTasksList.Add(Task.Run(() => _dirbScan.ExecuteDirbScan(request)));
+                    
+                    scanTasksList.Add(Task.Run(() => _virusTotalScan.ExecuteVirusTotalScan(request)));
+                    
+                    scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
+                    
+                    _logger.LogDebug("Scan finished");
 
                     await Task.WhenAll(scanTasksList);
-
-                    // if (request.ScanDirb.Any(x => !x.IsDirectory))
-                    // {
-                    //     foreach (var pageUri in request.ScanDirb.Where(x => !x.IsDirectory))
-                    //     {
-                    //         var pageHtml = _webCrawlerService.GetHtml(pageUri.FoundUrl);
-                    //         if (!String.IsNullOrEmpty(pageHtml))
-                    //         {
-                    //
-                    //         }
-                    //     }
-                    // }
-
                     request.IsProcessed = true;
                 }
 
                 if (unprocessedRequests.Count > 0)
                 {
-#if !DEBUG
                     _secSoulService.UpdateUnprocessedScanRequest(unprocessedRequests);
-#endif
                 }
 
 
