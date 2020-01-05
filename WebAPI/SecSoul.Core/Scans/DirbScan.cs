@@ -34,7 +34,7 @@ namespace SecSoul.Core.Scans
 
             var dirb = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.Dirb);
 
-            //_shellService.ShellExecute(string.Format(dirb.Script, request.Id, uri.AbsoluteUri));
+            _shellService.ShellExecute(string.Format(dirb.Script, request.Id, uri.AbsoluteUri));
 
             ExtractDirbResult(request);
 
