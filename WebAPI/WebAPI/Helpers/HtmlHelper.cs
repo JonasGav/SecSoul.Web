@@ -30,8 +30,7 @@ namespace SecSoul.WebAPI.Helpers
                     {
                         HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr>");
                         HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td><a href=\"{item.FoundUrl}\">{item.FoundUrl}</a></td>");
-                        //todo
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>200</td>");
+                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.HttpStatus}</td>");
                         HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
                     }
                     HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</table>");
@@ -54,8 +53,7 @@ namespace SecSoul.WebAPI.Helpers
                     {
                         HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr>");
                         HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td><a href=\"{item.FoundUrl}\">{item.FoundUrl}</a></td>");
-                        //todo
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>true</td>");
+                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.IsListable}</td>");
                         HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
                     }
                     HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</table>");

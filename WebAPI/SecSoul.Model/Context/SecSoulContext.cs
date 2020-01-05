@@ -156,6 +156,8 @@ namespace SecSoul.Model.Context
                     .HasName("ScanDirb_pk")
                     .ForSqlServerIsClustered(false);
 
+                entity.Property(e => e.IsListable).HasDefaultValue(false);
+
                 entity.HasIndex(e => e.Id)
                     .HasName("ScanDirb_Id_uindex")
                     .IsUnique();

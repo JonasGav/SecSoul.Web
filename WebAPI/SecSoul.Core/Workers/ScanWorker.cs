@@ -50,13 +50,13 @@ namespace SecSoul.Core.Workers
                     
                     var scanTasksList = new List<Task>();
 
-                    scanTasksList.Add(Task.Run(() => _nmapScan.ExecuteNmapScan(request)));
+                    //scanTasksList.Add(Task.Run(() => _nmapScan.ExecuteNmapScan(request)));
                     
                     scanTasksList.Add(Task.Run(() => _dirbScan.ExecuteDirbScan(request)));
                     
-                    scanTasksList.Add(Task.Run(() => _virusTotalScan.ExecuteVirusTotalScan(request)));
+                    //scanTasksList.Add(Task.Run(() => _virusTotalScan.ExecuteVirusTotalScan(request)));
                     
-                    scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
+                    //scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
                     
                     _logger.LogDebug("Scan finished");
 

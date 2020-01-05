@@ -34,13 +34,9 @@ namespace SecSoul.Core.Scans
 
             var dirb = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.Dirb);
 
-            //var resultName = _possibleScans.ScanOuputLocation + request.UserId + "_" + uri.AbsoluteUri;
-
-            _shellService.ShellExecute(string.Format(dirb.Script, request.Id, uri.AbsoluteUri));
+            //_shellService.ShellExecute(string.Format(dirb.Script, request.Id, uri.AbsoluteUri));
 
             ExtractDirbResult(request);
-            //_shellHelper.ShellExecute(string.Format("xsltproc {0} -o {1}", resultName + ".xml", resultName + ".html"));
-
 
             return Task.CompletedTask;
         }
@@ -66,11 +62,11 @@ namespace SecSoul.Core.Scans
             var resultFile = filesDirectoryInfo.GetFiles().FirstOrDefault();
 
             if (resultFile == null || !resultFile.Exists) return;
-            
+
             using (var st = new StreamReader(resultFile.FullName))
             {
                 var regxDir = new Regex("^==> DIRECTORY: (.+)$");
-                var regxPage = new Regex("^\\+ (.+?) ");
+                var regxPage = new Regex("^\\+ (.+?) \\(CODE:([0-9]+)");
 
                 string line;
                 while ((line = st.ReadLine()) != null)
@@ -88,19 +84,37 @@ namespace SecSoul.Core.Scans
                         });
                         continue;
                     }
+
                     if (matchPage.Success)
                     {
                         var matchGroup = matchPage.Groups[1];
+                        var matchStatus = matchPage.Groups[2];
                         request.ScanDirb.Add(new ScanDirb()
                         {
                             IsDirectory = false,
-                            FoundUrl = matchGroup.Value
+                            FoundUrl = matchGroup.Value,
+                            HttpStatus = matchStatus.Value
                         });
                         //_logger.LogInformation(matchGroup.Value);
                     }
                 }
-
             }
+
+            var content = File.ReadAllText(resultFile.FullName);
+            var regxListable =
+                new Regex(
+                    "---- Entering directory: (.+) ----\n\\(!\\) WARNING: Directory IS LISTABLE. No need to scan it.");
+            var regexMatches = regxListable.Matches(content);
+            foreach (Match regexMatch in regexMatches)
+            {
+                foreach (var MatchGroup in regexMatch.Groups)
+                {
+                    var foundDir = request.ScanDirb.Where(x => x.IsDirectory)
+                        .FirstOrDefault(x => x.FoundUrl == MatchGroup.ToString());
+                    if (foundDir != null) foundDir.IsListable = true;
+                }
+            }
+
         }
     }
 }

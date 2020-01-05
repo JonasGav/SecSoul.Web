@@ -176,7 +176,13 @@ namespace SecSoul.Model.Migrations
 
                     b.Property<string>("FoundUrl");
 
+                    b.Property<string>("HttpStatus");
+
                     b.Property<bool>("IsDirectory");
+
+                    b.Property<bool>("IsListable")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<int>("ScanRequestId");
 
