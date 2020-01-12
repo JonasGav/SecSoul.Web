@@ -30,14 +30,20 @@ namespace SecSoul.Core.Scans
 
         public Task ExecuteDirbScan(ScanRequest request)
         {
-            var uri = new Uri(request.WebsiteUrl);
+            try
+            {
+                var uri = new Uri(request.WebsiteUrl);
 
-            var dirb = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.Dirb);
+                var dirb = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.Dirb);
 
-            _shellService.ShellExecute(string.Format(dirb.Script, request.Id, uri.AbsoluteUri));
+                _shellService.ShellExecute(string.Format(dirb.Script, request.Id, uri.AbsoluteUri));
 
-            ExtractDirbResult(request);
-
+                ExtractDirbResult(request);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error at ExecuteDirbScan, Error: ");
+            }
             return Task.CompletedTask;
         }
 

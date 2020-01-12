@@ -26,15 +26,20 @@ namespace SecSoul.Core.Scans
         }
         public Task ExecuteNmapScan(ScanRequest request)
         {
-            var uri = new Uri(request.WebsiteUrl);
-            
-            var nmap = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.Nmap);
-            
+            try
+            {
+                var uri = new Uri(request.WebsiteUrl);
 
-            _shellService.ShellExecute(string.Format(nmap.Script, request.Id, uri.Host));
+                var nmap = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.Nmap);
+                
+                _shellService.ShellExecute(string.Format(nmap.Script, request.Id, uri.Host));
 
-            ExtractNmapResult(request);
-            
+                ExtractNmapResult(request);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error at ExecuteNmapScan, Error: ");
+            }
             return Task.CompletedTask;
         }
         private async void ExtractNmapResult(ScanRequest request)

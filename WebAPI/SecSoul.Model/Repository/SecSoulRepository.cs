@@ -54,7 +54,7 @@ namespace SecSoul.Model.Repository
             
         }
 
-        public void UpdateUnprocessedScanRequest(IList<ScanRequest> unprocessedRequests)
+        public void UpdateUnprocessedScanRequestList(IList<ScanRequest> unprocessedRequests)
         {
             try
             {
@@ -70,6 +70,24 @@ namespace SecSoul.Model.Repository
                 throw;
             }
         }
+        public void UpdateUnprocessedScanRequest(ScanRequest unprocessedRequest)
+        {
+            try
+            {
+                using (var scope = _contextFactory.SecSoulContextCreate())
+                {
+                    scope.ScanRequest.Update(unprocessedRequest);
+                    scope.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error at CreateScanRequest", e);
+                throw;
+            }
+        }
+        
+        
 
         public IList<ScanRequest> GetScanRequestByUser(Task<ApplicationUser> user)
         {

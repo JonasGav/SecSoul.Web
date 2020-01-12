@@ -29,11 +29,23 @@ namespace SecSoul.Core.DbService
             }
         }
 
-        public void UpdateUnprocessedScanRequest(IList<ScanRequest> unprocessedRequests)
+        public void UpdateUnprocessedScanRequestList(IList<ScanRequest> unprocessedRequests)
         {
             try
             {
-                _repository.UpdateUnprocessedScanRequest(unprocessedRequests);
+                _repository.UpdateUnprocessedScanRequestList(unprocessedRequests);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        public void UpdateUnprocessedScanRequest(ScanRequest unprocessedRequest)
+        {
+            try
+            {
+                _repository.UpdateUnprocessedScanRequest(unprocessedRequest);
             }
             catch (Exception e)
             {

@@ -56,20 +56,15 @@ namespace SecSoul.Core.Workers
                     
                     scanTasksList.Add(Task.Run(() => _virusTotalScan.ExecuteVirusTotalScan(request)));
                     
-                    scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
+                    if(!string.IsNullOrEmpty(request.WebsiteFtp))
+                        scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
                     
                     _logger.LogDebug("Scan finished");
 
                     await Task.WhenAll(scanTasksList);
                     request.IsProcessed = true;
+                    _secSoulService.UpdateUnprocessedScanRequest(request);
                 }
-
-                if (unprocessedRequests.Count > 0)
-                {
-                    _secSoulService.UpdateUnprocessedScanRequest(unprocessedRequests);
-                }
-
-
             }
             catch (Exception e)
             {

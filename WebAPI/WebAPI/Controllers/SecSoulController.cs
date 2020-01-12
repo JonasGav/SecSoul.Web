@@ -105,6 +105,8 @@ namespace SecSoul.WebAPI.Controllers
             var data = _repository.GetScanRequestById(requestId);
             if (data.ScanNmap.FirstOrDefault() == null)
             {
+                string responseMssg = "Bad Url";
+                Response.Body.Write(Encoding.ASCII.GetBytes(responseMssg));
                 return BadRequest();
             }
             

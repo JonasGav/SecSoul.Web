@@ -14,69 +14,70 @@ namespace SecSoul.WebAPI.Helpers
 
             var SmStart = HtmlContentParsed.FindIndex(x => x.Contains("Scan Summary"));
             var Smdone = HtmlContentParsed.FindIndex(x => x.Contains("External done"));
+            
             HtmlContentParsed.RemoveRange(SmStart, Smdone - SmStart);
             
             var startCount = HtmlContentParsed.Count;
             var bodyStart = HtmlContentParsed.FindIndex(x => x.Contains("<body>"));
             
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<div>");
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h1>Page Enumeration Results</h1>");
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</div>");
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<div>");
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h1>Page Enumeration Results</h1>");
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</div>");
 
             if (request.ScanDirb.Any())
             {
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<div>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h2>Pages found:</h2>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<div>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h2>Pages found:</h2>");
 
                 if (request.ScanDirb.Any(x => !x.IsDirectory))
                 {
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<table>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr class=\"head\">");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>Url</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>Http Status</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<table>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr class=\"head\">");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>Url</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>Http Status</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                     
                     foreach (var item in request.ScanDirb.Where(x => !x.IsDirectory))
                     {
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr>");
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td><a href=\"{item.FoundUrl}\">{item.FoundUrl}</a></td>");
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.HttpStatus}</td>");
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td><a href=\"{item.FoundUrl}\">{item.FoundUrl}</a></td>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td>{item.HttpStatus}</td>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                     }
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</table>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</table>");
                 }
                 else
                 {
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h3>No pages found</h3>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h3>No pages found</h3>");
                 }
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</div>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<div>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h2>Directories found:</h2>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</div>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<div>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h2>Directories found:</h2>");
                 if (request.ScanDirb.Any(x => x.IsDirectory))
                 {
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<table>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr class=\"head\">");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>Url</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>Is Listable</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<table>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr class=\"head\">");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>Url</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>Is Listable</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                     foreach (var item in request.ScanDirb.Where(x => x.IsDirectory))
                     {
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr>");
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td><a href=\"{item.FoundUrl}\">{item.FoundUrl}</a></td>");
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.IsListable}</td>");
-                        HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td><a href=\"{item.FoundUrl}\">{item.FoundUrl}</a></td>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td>{item.IsListable}</td>");
+                        HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                     }
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</table>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</table>");
                 }
                 else
                 {
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h3>No Directories Found</h3>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h3>No Directories Found</h3>");
                 }
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</div>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</div>");
             }
             else
             {
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h2>No Results gathered</h2>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h2>No Results gathered</h2>");
             }
             var result = String.Join('\n', HtmlContentParsed.ToArray());
             return String.Join('\n', HtmlContentParsed.ToArray());
@@ -85,29 +86,33 @@ namespace SecSoul.WebAPI.Helpers
         public string AddVirusTotalResults(string HtmlContent, ScanRequest request)
         {
             var HtmlContentParsed = HtmlContent.Split('\n').ToList();
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<div>");
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h1>Website Access Scan Results</h1>");
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</div>");
+            
+            var startCount = HtmlContentParsed.Count;
+            var bodyStart = HtmlContentParsed.FindIndex(x => x.Contains("<body>"));
+            
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<div>");
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h1>Website Access Scan Results</h1>");
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</div>");
 
             if (request.ScanVirusTotal.Any())
             {
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<table>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr class=\"head\">");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>Provider</td>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>Risk detected</td>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<table>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr class=\"head\">");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>Provider</td>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>Risk detected</td>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                 foreach (var item in request.ScanVirusTotal.Where(x => x.ScanResult == true))
                 {
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.ScanProvider}</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.ScanResult}</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td>{item.ScanProvider}</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td>{item.ScanResult}</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                 }
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</table>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</table>");
             }
             else
             {
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h2>No Results gathered</h2>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h2>No Results gathered</h2>");
             }
             var result = String.Join('\n', HtmlContentParsed.ToArray());
             return String.Join('\n', HtmlContentParsed.ToArray());
@@ -116,31 +121,34 @@ namespace SecSoul.WebAPI.Helpers
         public string AddHashCheckResults(string HtmlContent, ScanRequest request)
         {
             var HtmlContentParsed = HtmlContent.Split('\n').ToList();
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<div>");
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h1>File Hash Scan Results</h1>");
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</div>");
+            var startCount = HtmlContentParsed.Count;
+            var bodyStart = HtmlContentParsed.FindIndex(x => x.Contains("<body>"));
+            
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<div>");
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h1>File Hash Scan Results</h1>");
+            HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</div>");
 
             if (request.ScanHashCheck.Any())
             {
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<table>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr class=\"head\">");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>File Hash</td>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>File Location</td>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<td>Malware Chance Percentage</td>");
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<table>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr class=\"head\">");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>File Hash</td>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>File Location</td>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<td>Malware Chance Percentage</td>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                 foreach (var item in request.ScanHashCheck)
                 {
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<tr>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.Hash}</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.Location}</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,$"<td>{item.MalwarePercentage}</td>");
-                    HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</tr>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td>{item.Hash}</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td>{item.Location}</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,$"<td>{item.MalwarePercentage}</td>");
+                    HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</tr>");
                 }
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</table>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</table>");
             }
             else
             {
-                HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h2>No Bad File Hashes Found</h2>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h2>No Bad File Hashes Found</h2>");
             }
             
             var result = String.Join('\n', HtmlContentParsed.ToArray());

@@ -27,14 +27,21 @@ namespace SecSoul.Core.Scans
 
         public Task ExecuteHashCheckScan(ScanRequest request)
         {
+            try
+            {
+                var uri = new Uri(request.WebsiteFtp);
 
-            var uri = new Uri(request.WebsiteFtp);
+                var nmap = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.HashScan);
 
-            var nmap = _possibleScans.Scans.First(x => x.Id == (int) ScanEnum.HashScan);
+                _shellService.ShellExecute(string.Format(nmap.Script, request.Id, uri.AbsoluteUri, request.FtpUsername,
+                    request.FtpPassword));
 
-            _shellService.ShellExecute(string.Format(nmap.Script, request.Id, uri.AbsoluteUri, request.FtpUsername, request.FtpPassword));
-
-            ExtractHashCheckResult(request);
+                ExtractHashCheckResult(request);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error at ExecuteHashCheckScan, Error: ");
+            }
 
             return Task.CompletedTask;
         }
