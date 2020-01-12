@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using SecSoul.Model.Entity;
 
@@ -8,7 +9,16 @@ namespace SecSoul.WebAPI.Helpers
     {
         public string AddDirbResults(string HtmlContent, ScanRequest request)
         {
-            var HtmlContentParsed = HtmlContent.Split('\n').ToList();
+            var HtmlContentParsedUnchanged = HtmlContent.Split('\n').ToList();
+            var HtmlContentParsed = HtmlContentParsedUnchanged.Select(s => s.Replace("Nmap", "External")).ToList();
+
+            var SmStart = HtmlContentParsed.FindIndex(x => x.Contains("Scan Summary"));
+            var Smdone = HtmlContentParsed.FindIndex(x => x.Contains("External done"));
+            HtmlContentParsed.RemoveRange(SmStart, Smdone - SmStart);
+            
+            var startCount = HtmlContentParsed.Count;
+            var bodyStart = HtmlContentParsed.FindIndex(x => x.Contains("<body>"));
+            
             HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<div>");
             HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h1>Page Enumeration Results</h1>");
             HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</div>");
@@ -76,7 +86,7 @@ namespace SecSoul.WebAPI.Helpers
         {
             var HtmlContentParsed = HtmlContent.Split('\n').ToList();
             HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<div>");
-            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h1>Virus Total Results</h1>");
+            HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"<h1>Website Access Scan Results</h1>");
             HtmlContentParsed.Insert(HtmlContentParsed.Count - 2,"</div>");
 
             if (request.ScanVirusTotal.Any())
