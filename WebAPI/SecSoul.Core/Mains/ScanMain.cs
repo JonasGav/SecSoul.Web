@@ -77,7 +77,7 @@ namespace SecSoul.Core.Mains
                 Task.Delay(1000).Wait();
 
             }
-            _logger.LogInformation("HomeSec stopped");
+            _logger.LogInformation("SecSoul stopped");
             return Task.CompletedTask;
         }
     }
