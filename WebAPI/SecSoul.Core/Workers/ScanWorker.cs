@@ -57,7 +57,7 @@ namespace SecSoul.Core.Workers
                     scanTasksList.Add(Task.Run(() => _virusTotalScan.ExecuteVirusTotalScan(request)));
                     
                     if(!string.IsNullOrEmpty(request.WebsiteFtp))
-                        scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
+                         scanTasksList.Add(Task.Run(() => _hashCheckScan.ExecuteHashCheckScan(request)));
                     
                     _logger.LogDebug("Scan finished");
 

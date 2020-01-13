@@ -42,7 +42,7 @@ export class ScanPanelListComponent implements OnInit {
       { headerName: 'Website Ftp', field: 'websiteFtp' },
       { headerName: 'Request Date', field: 'requestDate' },
       { headerName: 'Is finished', field: 'isProcessed' },
-      { headerName: 'Nmap scanned', field: 'nmapScanned' },
+//      { headerName: 'Nmap scanned', field: 'nmapScanned' },
       {
         headerName: "Download Report",
         field: "value",

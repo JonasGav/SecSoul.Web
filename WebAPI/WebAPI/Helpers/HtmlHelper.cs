@@ -94,7 +94,7 @@ namespace SecSoul.WebAPI.Helpers
             HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h1>Website Access Scan Results</h1>");
             HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"</div>");
 
-            if (request.ScanVirusTotal.Any())
+            if (request.ScanVirusTotal.Any(x => x.ScanResult == true))
             {
                 HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<table>");
                 HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<tr class=\"head\">");
@@ -112,7 +112,7 @@ namespace SecSoul.WebAPI.Helpers
             }
             else
             {
-                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h2>No Results gathered</h2>");
+                HtmlContentParsed.Insert(bodyStart + (HtmlContentParsed.Count - startCount) + 1,"<h2>No Risks Detected</h2>");
             }
             var result = String.Join('\n', HtmlContentParsed.ToArray());
             return String.Join('\n', HtmlContentParsed.ToArray());
